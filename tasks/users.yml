@@ -1,0 +1,32 @@
+---
+
+- name: Add 'ansible' group
+  group:
+    name: ansible
+    state: present
+
+- name: Grant 'ansible' group password-less sudo
+  copy:
+    src: files/sudoers.ansible
+    dest: /etc/sudoers.d/ansible
+
+- name: Create admin users
+  become: true
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default('') }}"
+    groups: "{{ item.groups | default('sudo,adm,ansible') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    password: "{{ item.password | default('*') }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ admin_users }}"
+
+- name: Add authorized_keys
+  become: true
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
+  with_subelements:
+    - "{{ admin_users }}"
+    - ssh_pub_keys
+

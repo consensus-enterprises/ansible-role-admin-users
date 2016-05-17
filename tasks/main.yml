@@ -1,32 +1,13 @@
 ---
 
-- name: Add 'ansible' group
-  group:
-    name: ansible
-    state: present
+- name: Include checks to see if admin_users already exist.
+  include: check.yml
 
-- name: Grant 'ansible' group password-less sudo
-  copy:
-    src: files/sudoers.ansible
-    dest: /etc/sudoers.d/ansible
+- name: Include group/user creation tasks.
+  include: users.yml
 
-- name: Create admin users
-  sudo: true
-  user:
-    name: "{{ item.name }}"
-    comment: "{{ item.comment | default('') }}"
-    groups: "{{ item.groups | default('sudo,adm,ansible') }}"
-    shell: "{{ item.shell | default('/bin/bash') }}"
-    password: "{{ item.password | default('*') }}"
-    state: "{{ item.state | default('present') }}"
-  with_items: "{{ admin_users }}"
-
-- name: Add authorized_keys
-  sudo: true
-  authorized_key:
-    user: "{{ item.0.name }}"
-    key: "{{ item.1 }}"
-  with_subelements:
-    - "{{ admin_users }}"
-    - ssh_pub_keys
+- name: Reset the Ansible SSH user to the original value, if previously reset.
+  set_fact:
+    ansible_ssh_user: "{{ original_ansible_ssh_user }}"
+  when: original_ansible_ssh_user is defined
 

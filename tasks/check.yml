@@ -1,0 +1,19 @@
+---
+
+- name: Test whether current user can SSH into the server.
+  become: False
+  local_action: shell ssh {{ lookup('env', 'USER') }}@{{ public_ip }} "echo success"
+  failed_when: False
+  changed_when: False
+  register: current_user_enabled
+
+- name: Record the Ansible SSH user, if set.
+  set_fact:
+    original_ansible_ssh_user: "{{ ansible_ssh_user }}"
+  when: (ansible_ssh_user is defined) and (current_user_enabled.stdout != 'success')
+
+- name: Set the Ansible SSH user to root, if the current user cannot SSH.
+  set_fact:
+    ansible_ssh_user: 'root'
+  when: (ansible_ssh_user is defined) and (current_user_enabled.stdout != 'success')
+
