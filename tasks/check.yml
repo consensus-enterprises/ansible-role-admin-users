@@ -15,5 +15,5 @@
 - name: Set the Ansible SSH user to root, if the current user cannot SSH.
   set_fact:
     ansible_ssh_user: 'root'
-  when: (ansible_ssh_user is defined) and (current_user_enabled.stdout != 'success')
+  when: current_user_enabled.stdout != 'success'
 
