@@ -22,6 +22,8 @@
     password: "{{ item.password | default('*') }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ admin_users }}"
+  loop_control:
+    label: "{{ item.name }}"
 
 - name: Add authorized_keys
   become: true
@@ -31,4 +33,7 @@
   with_subelements:
     - "{{ admin_users }}"
     - ssh_pub_keys
+  loop_control:
+    label: "{{ item.0.name }}"
+
 
