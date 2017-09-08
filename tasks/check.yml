@@ -1,18 +1,8 @@
 ---
 
-- name: Set EC2 IP address facts
-  set_fact:
-    public_ip_address: "{{ ec2_ip_address }}"
-  when: ec2_ip_address is defined
-
-- name: Set Linode IP address facts
-  set_fact:
-    public_ip_address: "{{ public_ip }}"
-  when: public_ip is defined
-
 - name: Test whether current user can SSH into the server.
   become: False
-  local_action: shell ssh {{ lookup('env', 'USER') }}@{{ public_ip_address }} -o StrictHostKeyChecking=no -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o ConnectTimeout=10 "echo success"
+  local_action: shell ssh {{ lookup('env', 'USER') }}@{{ ansible_ssh_host }} -o StrictHostKeyChecking=no -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o ConnectTimeout=10 "echo success"
   failed_when: False
   changed_when: False
   register: current_user_enabled
