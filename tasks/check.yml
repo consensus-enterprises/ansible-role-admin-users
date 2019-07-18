@@ -7,8 +7,8 @@
 
 - name: Set IP address facts
   set_fact:
-    public_ip_address: "{{ public_ip }}"
-  when: public_ip is defined
+    public_ip_address: "{{ ansible_default_ipv4.address }}"
+  when: ansible_default_ipv4.address is defined
 
 - name: Test whether current user can SSH into the server.
   become: False
