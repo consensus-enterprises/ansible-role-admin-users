@@ -1,0 +1,17 @@
+---
+
+- name: Create admin users
+  become: true
+  user:
+    name: "{{ admin_user.name }}"
+    comment: "{{ admin_user.comment | default('') }}"
+    groups: "{{ admin_user.groups | default('sudo,adm,ansible') }}"
+    shell: "{{ admin_user.shell | default('/bin/bash') }}"
+    password: "{{ admin_user.password | default('*') }}"
+    state: "{{ admin_user.state | default('present') }}"
+
+- name: Add authorized_keys
+  become: true
+  authorized_key:
+    user: "{{ admin_user.name }}"
+    key: "{{ admin_user.ssh_pub_keys }}"

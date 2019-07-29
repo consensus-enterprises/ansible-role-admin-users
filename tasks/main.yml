@@ -4,7 +4,7 @@
   include: check.yml
 
 - name: Include group/user creation tasks.
-  include: users.yml
+  include: admin_users.yml
 
 - name: Reset the Ansible SSH user to the original value, if previously reset.
   set_fact:

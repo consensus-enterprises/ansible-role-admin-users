@@ -3,12 +3,12 @@
 - name: Set EC2 IP address facts
   set_fact:
     public_ip_address: "{{ ec2_ip_address }}"
-  when: ec2_ip_address is defined
+  when: (public_ip_address is not defined) and (ec2_ip_address is defined)
 
 - name: Set IP address facts
   set_fact:
     public_ip_address: "{{ ansible_default_ipv4.address }}"
-  when: ansible_default_ipv4.address is defined
+  when: (public_ip_address is not defined) and (ansible_default_ipv4.address is defined)
 
 - name: Test whether current user can SSH into the server.
   become: False

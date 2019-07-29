@@ -1,0 +1,14 @@
+---
+
+- name: Add 'ansible' group
+  become: true
+  group:
+    name: ansible
+    state: present
+
+- name: Grant 'ansible' group password-less sudo
+  become: true
+  copy:
+    src: files/sudoers.ansible
+    dest: /etc/sudoers.d/ansible
+
