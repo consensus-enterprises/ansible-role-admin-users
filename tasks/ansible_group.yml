@@ -8,7 +8,7 @@
 
 - name: Grant 'ansible' group password-less sudo
   become: true
-  copy:
-    src: files/sudoers.ansible
+  template:
+    src: files/sudoers.ansible.j2
     dest: /etc/sudoers.d/ansible
 
