@@ -15,3 +15,6 @@
   authorized_key:
     user: "{{ admin_user.name }}"
     key: "{{ admin_user.ssh_pub_keys }}"
+    # Provide a path; required when running under '--check'.
+    # See: https://github.com/ansible/ansible/issues/30112
+    path: "/home/{{ admin_user.name }}/.ssh/authorized_keys"

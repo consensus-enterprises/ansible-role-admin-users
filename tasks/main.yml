@@ -2,6 +2,7 @@
 
 - name: Include checks to see if admin_users already exist.
   include: check.yml
+  when: check_for_admin_users |bool
 
 - name: Include group/user creation tasks.
   include: admin_users.yml

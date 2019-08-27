@@ -1,3 +1,4 @@
 ---
 
 default_ansible_ssh_user: 'root'
+check_for_admin_users: True
