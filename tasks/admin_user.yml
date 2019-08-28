@@ -4,7 +4,7 @@
   become: true
   user:
     name: "{{ admin_user.name }}"
-    comment: "{{ admin_user.comment | default('') }}"
+    comment: "{{ admin_user.comment | default(omit) }}"
     groups: "{{ admin_user.groups | default('sudo,adm,ansible') }}"
     shell: "{{ admin_user.shell | default('/bin/bash') }}"
     password: "{{ admin_user.password | default('*') }}"
@@ -18,3 +18,4 @@
     # Provide a path; required when running under '--check'.
     # See: https://github.com/ansible/ansible/issues/30112
     path: "/home/{{ admin_user.name }}/.ssh/authorized_keys"
+  when: admin_user.ssh_pub_keys is defined
