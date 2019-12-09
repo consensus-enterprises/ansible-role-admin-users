@@ -1,7 +1,7 @@
-Role Name
-=========
+Consensus: Amdin Users
+======================
 
-Create admin users. Adds an 'ansible' role that provides password-less sudo access, suitable for running Ansible.
+Creates admin users. Adds an 'ansible' role that provides password-less sudo access, suitable for running Ansible.
 
 Requirements
 ------------
@@ -41,14 +41,14 @@ Include as you would any other role. You can optionally add host-specific users 
               - "ssh-rsa AAAAB3..."
         admin_users: "{{ admin_users + local_admin_users }}"
       roles:
-         - ergonlogic.admin_users
+         - consensus.admin_users
 
 License
 -------
 
-MIT / BSD
+GNU AGPLv3
 
 Author Information
 ------------------
 
-This role was created in 2016 by [Christopher Gervais](http://ergonlogic.com/).
+Originally written by [Christopher Gervais](https://consensus.enterprises/team/christopher/) in 2016. Updated with contributions from [Dan Friedman](https://consensus.enterprises/team/dan/) and the folks at [Consensus Enterprises](https://consensus.enterprises). To contact us, please use our [Web contact form](https://consensus.enterprises/#contact).
