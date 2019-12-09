@@ -1,4 +1,4 @@
-Consensus: Amdin Users
+Consensus: Admin Users
 ======================
 
 Creates admin users. Adds an 'ansible' role that provides password-less sudo access, suitable for running Ansible.
