@@ -7,7 +7,7 @@
     comment: "{{ admin_user.comment | default(omit) }}"
     groups: "{{ admin_user.groups | default('sudo,adm,ansible') }}"
     shell: "{{ admin_user.shell | default('/bin/bash') }}"
-    password: "{{ admin_user.password | default('*') }}"
+    password: "{{ admin_user.password | default(omit) }}"
     state: "{{ admin_user.state | default('present') }}"
 
 - name: Add authorized_keys
