@@ -1,14 +1,13 @@
 ---
 
 - name: Include checks to see if admin_users already exist.
-  include: check.yml
+  import_tasks: check.yml
   when: check_for_admin_users |bool
 
 - name: Include group/user creation tasks.
-  include: admin_users.yml
+  import_tasks: admin_users.yml
 
 - name: Reset the Ansible SSH user to the original value, if previously reset.
   set_fact:
     ansible_ssh_user: "{{ original_ansible_ssh_user }}"
   when: original_ansible_ssh_user is defined
-

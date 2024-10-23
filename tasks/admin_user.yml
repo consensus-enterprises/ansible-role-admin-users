@@ -2,7 +2,7 @@
 
 - name: Create admin users
   become: true
-  user:
+  ansible.builtin.user:
     name: "{{ admin_user.name }}"
     comment: "{{ admin_user.comment | default(omit) }}"
     groups: "{{ admin_user.groups | default('sudo,adm,ansible') }}"
@@ -12,8 +12,9 @@
 
 - name: Add authorized_keys
   become: true
-  authorized_key:
+  ansible.builtin.authorized_key:
     user: "{{ admin_user.name }}"
+    state: present
     key: "{{ admin_user.ssh_pub_keys }}"
     # Provide a path; required when running under '--check'.
     # See: https://github.com/ansible/ansible/issues/30112
