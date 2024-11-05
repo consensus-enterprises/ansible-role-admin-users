@@ -1,6 +1,15 @@
 ---
 
-- name: Create admin users
+- name: "Ensure {{ admin_user.name }}'s home doesn't already exist."
+  become: true
+  ansible.builtin.user:
+    name: "{{ admin_user.name }}"
+    state: absent
+    remove: yes
+    force: true
+  register: delete_user_result
+
+- name: "Create admin user {{ admin_user.name }}"
   become: true
   ansible.builtin.user:
     name: "{{ admin_user.name }}"
@@ -9,6 +18,15 @@
     shell: "{{ admin_user.shell | default('/bin/bash') }}"
     password: "{{ admin_user.password | default(omit) }}"
     state: "{{ admin_user.state | default('present') }}"
+
+- name: "Ensure {{ admin_user.name }} HOME has sane ownership/permissions."
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ admin_user.name }}"
+    group: "{{ admin_user.name }}"
+    owner: "{{ admin_user.name }}"
+    mode: "u=rwx,g=rx"
 
 - name: Add authorized_keys
   become: true
