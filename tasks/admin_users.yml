@@ -1,13 +1,12 @@
 ---
 
 - name: Create 'ansible' group.
-  include: ansible_group.yml
+  import_tasks: ansible_group.yml
   when: (admin_users is defined) and (admin_users | length > 0)
 
 - name: Create admin users
-  include: admin_user.yml
+  include_tasks: admin_user.yml
   vars:
     admin_user: "{{ item }}"
   loop: "{{ admin_users }}"
   when: (admin_users is defined) and (admin_users | length > 0)
-

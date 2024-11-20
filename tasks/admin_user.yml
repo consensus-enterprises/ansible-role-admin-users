@@ -1,8 +1,17 @@
 ---
 
-- name: Create admin users
+- name: "Ensure {{ admin_user.name }}'s home doesn't already exist."
   become: true
-  user:
+  ansible.builtin.user:
+    name: "{{ admin_user.name }}"
+    state: absent
+    remove: yes
+    force: true
+  register: delete_user_result
+
+- name: "Create admin user {{ admin_user.name }}"
+  become: true
+  ansible.builtin.user:
     name: "{{ admin_user.name }}"
     comment: "{{ admin_user.comment | default(omit) }}"
     groups: "{{ admin_user.groups | default('sudo,adm,ansible') }}"
@@ -10,10 +19,20 @@
     password: "{{ admin_user.password | default(omit) }}"
     state: "{{ admin_user.state | default('present') }}"
 
+- name: "Ensure {{ admin_user.name }} HOME has sane ownership/permissions."
+  become: true
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ admin_user.name }}"
+    group: "{{ admin_user.name }}"
+    owner: "{{ admin_user.name }}"
+    mode: "u=rwx,g=rx"
+
 - name: Add authorized_keys
   become: true
-  authorized_key:
+  ansible.builtin.authorized_key:
     user: "{{ admin_user.name }}"
+    state: present
     key: "{{ admin_user.ssh_pub_keys }}"
     # Provide a path; required when running under '--check'.
     # See: https://github.com/ansible/ansible/issues/30112
